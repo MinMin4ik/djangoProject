@@ -1,0 +1,33 @@
+<nav class="fixed-top navbar navbar-expand-lg navbar-light bg-warning">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+        <ul class="navbar-nav w-100  text-center row">
+            <li class="nav-item col-1 align-self-start">
+                <a class="navbar-brand" href="#">Navbar</a>
+            </li>
+            <li class="nav-item active col-4">
+                <form class="form-inline my-2 my-lg-0" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <label for="submit_search" class="button">&#128269;</label>
+                    <input id="submit_search" type="submit" hidden>
+                </form>
+            </li>
+            <li class="nav-item col-7 text-end">
+                    <a href="/cart/">Корзина<span class="badge">{{ request.COOKIES.cart_count }}</span></a>
+                {% if user.is_authenticated %}
+                    <span class="text">
+                      {{ user.get_full_name|default:user.username }} | <a href="/logout/">Выйти</a>
+                    </span>
+                {% else %}
+                    <span class="text">
+                    <a href="/register">Регистрация</a> | <a href="/login/">Войти</a>
+                    </span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>

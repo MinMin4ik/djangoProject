@@ -1,0 +1,26 @@
+
+
+
+.navbar + * {
+    margin-top: 56px;
+}
+
+.dish_cart img {
+
+    width: 120px
+}
+.card-img:hover{
+    transform: scale(1.2,1.2);
+}
+
+body {
+    background:darkseagreen;
+    background-size: cover;
+    transition: 3s;
+}
+@keyframes fadeout {
+    from{
+    }
+    to{
+    }
+}
