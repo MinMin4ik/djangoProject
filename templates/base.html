@@ -14,9 +14,9 @@
                     <a href="#" class="btn btn-primary">Перейти к блюду</a>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">коспания: {{ dish.company }}</li>
-                    <li class="list-group-item">цена: {{ dish.price }}</li>
-                    <li class="list-group-item">категории: {{ dish.get_categories }}</li>
+                    <li class="list-group-item">КОМПАНИЯ: {{ dish.company }}</li>
+                    <li class="list-group-item">ЦЕНА: {{ dish.price }}</li>
+                    <li class="list-group-item">КАТЕГОРИЯ: {{ dish.get_categories }}</li>
                 </ul>
                 <form action="/cart/" method="post">
                     {% csrf_token %}

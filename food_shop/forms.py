@@ -31,5 +31,4 @@ class LoginForm(forms.Form):
 
 class SearchForm(forms.Form):
     # required отвечает за то является ли поле обязательным
-    search = forms.CharField(required=False,
-                             label='', )
+    search = forms.CharField(required=False, label='')

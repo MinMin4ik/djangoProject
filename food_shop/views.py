@@ -154,3 +154,14 @@ class CartView(MasterView):
         response = self.get_cart_records(cart, redirect('/#dish-{}'.format(dish.id)))
         return response
         # перенаправляем на главную страницу, с учетом якоря
+
+# class Kit(MasterView):
+#     total_after=Kit.total_after
+#     total_before=Kit.total_before
+#     percent=Kit.percent
+#     def summa(self):
+#         self.total_before=Dish.price
+#         self.total_before.save()
+#     def procent(self):
+#         self.total_after= self.total_before(self.total_before)
+#         self.total_after.

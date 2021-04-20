@@ -14,9 +14,9 @@
 }
 
 body {
-    background:darkseagreen;
+    background:firebrick;
     background-size: cover;
-    transition: 3s;
+    transition: 2s;
 }
 @keyframes fadeout {
     from{
