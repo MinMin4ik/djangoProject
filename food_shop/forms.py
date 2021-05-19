@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class EditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
+        fields = ('username', 'email', 'first_name', 'last_name',)
 
 
 class RegisterForm(UserCreationForm):
@@ -15,8 +15,8 @@ class RegisterForm(UserCreationForm):
     email = forms.CharField(widget=forms.EmailInput, max_length=254, help_text='Обязательное поле.', required=False)
     # пароль также проходит валидацию и по умолчанию к нему применяются довольно строгие правила
     # но тут указывается тип поля уже с помощью аргумента widget
-    password1 = forms.CharField(widget=forms.PasswordInput, max_length=254, help_text='')
-    password2 = forms.CharField(widget=forms.PasswordInput, max_length=254, help_text='')
+    password1 = forms.CharField(widget=forms.PasswordInput, max_length=254, help_text='ппридумайте пороль')
+    password2 = forms.CharField(widget=forms.PasswordInput, max_length=254, help_text='введите 2 пороль')
 
     class Meta:
         model = User

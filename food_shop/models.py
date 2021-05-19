@@ -1,17 +1,23 @@
+import os
+import pickle
+
 from django.contrib.auth.models import User
+from django.contrib.sites import requests
 from django.core.validators import MaxValueValidator
 from django.db import models
 from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill
+import requests.cookies
 
 
 class UserProfile(models.Model):
+    object = None
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, max_length=900)
 
     def __str__(self):
-        return self.user.username
+        return self.user
 
 
 class Company(models.Model):
@@ -73,17 +79,22 @@ class Kit(models.Model):
     percent = models.PositiveIntegerField(null=True, validators=[MaxValueValidator(99)])
     items = models.ManyToManyField(Dish)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.id = None
+
     def __str__(self):
         return str(self.id)
 
-    # def save(self, *args, **kwargs):
-    #
-    #     super(Kit, self).save(*args, **kwargs)
 
 class Cart(models.Model):
     session_key = models.CharField(max_length=999, blank=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     total_cost = models.PositiveIntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.id = None
 
     def __str__(self):
         return str(self.id)
@@ -100,6 +111,27 @@ class Cart(models.Model):
 
 
 class CartContent(models.Model):
+    objects = None
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Dish, on_delete=models.CASCADE)
     qty = models.PositiveIntegerField(null=True)
+
+    # def save_cookies(self, filename):
+    #     if not os.path.isdir(os.path.dirname(filename)):
+    #         return False
+    #     with open(filename, 'w') as f:
+    #         f.truncate()
+    #         pickle.dump(id('1').cookies._cookies, f)
+    #
+    # def load_cookies(self, filename):
+    #     if not os.path.isfile(filename):
+    #         return False
+    #
+    #     with open(filename) as f:
+    #         cookies = pickle.load(f)
+    #         if cookies:
+    #             jar = requests.cookies.RequestsCookieJar()
+    #             jar._cookies = cookies
+    #             self.cookies = jar
+    #         else:
+    #             return False

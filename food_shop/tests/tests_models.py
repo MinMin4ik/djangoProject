@@ -1,12 +1,5 @@
 from django.test import TestCase
-from food_shop.models import Category, Company
-
-
-# from food_shop.models import company
-
-
-class Company:
-    pass
+from food_shop.models import Category
 
 
 class TestCategory(TestCase):
@@ -29,24 +22,28 @@ class TestCategory(TestCase):
     Testing model updating function.
     """
 
-    def test_update_Company(self):
+    def test_update_category_success(self):
         new_title = 'new test title'
         payload = {
             'title': 'test_title',
         }
-        Company = Company.objects
-        Company.title = new_title
-        Company.save()
-        Company.refresh_from_db()
-        self.assertEqual(Company.title, new_title)
+        category = Category.objects.create(**payload)
+        category.title = new_title
+        category.save()
+        category.refresh_from_db()
+        self.assertEqual(category.title, new_title)
 
-    def test_update_company_fail(self):
+    def test_update_category_fail(self):
+        """new test title"""
         payload = {
-            'title': 'new test title',
-            'unknown_field': 'value'
+            'title': 'test_title',
         }
-        with self.assertRaises(TypeError):
-            Company.refresh_from_db
+        category = Category.objects.create(**payload)
+        category.title = 1
+        category.save()
+        category_from_db = Category.objects.get(id=category.id)
+        print(category.__dict__)
+        self.assertNotEqual(category.__dict__, category_from_db.__dict__)
 
     """
     Testing model deleting function.
@@ -60,4 +57,27 @@ class TestCategory(TestCase):
         pk = category.pk
         category.delete()
         with self.assertRaises(Category.DoesNotExist):
-            category = Category.objects.get(pk=pk)
+            Category.objects.get(pk=pk)
+
+
+class TestDish(TestCase):
+    def test_create_dish_success(self):
+        payload = {
+            'title': 'mi note 10',
+            'description': '',
+            'category': 1,
+            'company': 1,
+            'image': ''
+
+        }
+
+    """
+    Testing model deleting function.
+    """
+
+# class Directory_Tests(TestCase):
+#     def test_directory_success200(self):
+#         payload = {
+#         ""
+#         }
+

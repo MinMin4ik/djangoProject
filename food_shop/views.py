@@ -1,22 +1,31 @@
-from django.shortcuts import render
+# # from django.shortcuts import render
+# from msilib.schema import ListView
+import profile
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Dish, Category, Cart, CartContent
-from .forms import SearchForm, LoginForm, RegisterForm, EditForm
+from whitenoise.responders import Response
+
+import food_shop
+from .models import Dish, Category, Cart, CartContent, UserProfile
+from food_shop.forms import SearchForm, LoginForm, RegisterForm, EditForm
 from django.contrib.postgres.search import SearchVector
+from django.core.paginator import Paginator
+from django.views.generic import ListView
 
 
 class MasterView(View):
 
     def get_cart_records(self, cart=None, response=None):
         cart = self.get_cart() if cart is None else cart
-        if cart is not None:
-            cart_records = CartContent.objects.filter(cart_id=cart.id)
-        else:
+        if cart is None:
             cart_records = []
+        else:
+            cart_records = CartContent.objects.user(cart_id=cart.id)
 
         if response:
             response.set_cookie('cart_count', len(cart_records))
@@ -51,9 +60,23 @@ class HomeView(MasterView):
     all_dishes = Dish.objects.all()
 
     def get(self, request):
+        paginator = Paginator(self.all_dishes, 1)
+        request.GET.get('page')
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        index = paginator.page_range.index(page_obj.number)
+        max_index = len(paginator.page_range)
+        start_index = - 3 if index >= 3 else 0
+        end_index = index + 3 if index <= max_index - 3 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        profile = None
+        if request.user.is_authenticated:
+            profile = UserProfile.objects.filter(user=request.user).first()
         form = SearchForm()
         return render(request, 'base.html',
-                      {'dishes': self.all_dishes, 'form': form})
+                      {'dishes': page_obj, 'page_range': page_range, 'form': form, 'profile': profile})
 
     def post(self, request):
         form = SearchForm(request.POST)
@@ -154,14 +177,3 @@ class CartView(MasterView):
         response = self.get_cart_records(cart, redirect('/#dish-{}'.format(dish.id)))
         return response
         # перенаправляем на главную страницу, с учетом якоря
-
-# class Kit(MasterView):
-#     total_after=Kit.total_after
-#     total_before=Kit.total_before
-#     percent=Kit.percent
-#     def summa(self):
-#         self.total_before=Dish.price
-#         self.total_before.save()
-#     def procent(self):
-#         self.total_after= self.total_before(self.total_before)
-#         self.total_after.
